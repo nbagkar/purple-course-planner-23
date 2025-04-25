@@ -26,11 +26,11 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary))', // NYU Purple
+          DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))'
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))', // Light Purple
+          DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))'
         },
         destructive: {
@@ -45,12 +45,16 @@ export default {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))'
         },
-        nyu: {
-          purple: '#6A4FBB',        // Richer, more vibrant purple
-          'light-purple': '#AB92F5', // Softer, more pastel light purple
-          'deep-purple': '#4A2C7A',  // Deeper, more sophisticated purple
-          'lavender': '#D5BBFF',     // Soft lavender accent
-          'silver': '#9F9EA1'        // Keeping the original silver
+        theme: {
+          'primary': '#1EAEDB',      // Bright blue
+          'secondary': '#33C3F0',    // Sky blue
+          'accent': '#F97316',       // Vibrant orange
+          'muted': '#D3E4FD',        // Soft blue
+          'background': '#F1F0FB',   // Soft gray
+          'success': '#10B981',      // Green
+          'warning': '#F59E0B',      // Amber
+          'error': '#EF4444',        // Red
+          'info': '#0EA5E9'          // Ocean blue
         }
       },
       borderRadius: {
@@ -87,4 +91,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-
