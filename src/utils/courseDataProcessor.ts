@@ -1,4 +1,5 @@
-import { Course, Recommendation, Requirements, MissingRequirements } from '../models/types';
+import { Course, Recommendation, Requirements, MissingRequirements, CategoryMissing } from '../models/types';
+import { semanticSearchDeepseek } from './deepseekAPI';
 
 export const parseCsvToJson = (csvContent: string): Course[] => {
   const lines = csvContent.split('\n');
@@ -49,28 +50,45 @@ export const parseCsvToJson = (csvContent: string): Course[] => {
     
     // Create course object
     const course: Course = {
-      key: getFieldValue(values, headerMap, 'key') || '',
       course_id: courseCode,
       course_name: getFieldValue(values, headerMap, 'title') || '',
-      credits: 4, // Default to 4 credits
+      title: getFieldValue(values, headerMap, 'title') || '',
+      description: getFieldValue(values, headerMap, 'description') || '',
+      credits: parseInt(getFieldValue(values, headerMap, 'credits') || '4', 10) || 4,
       department,
-      section: getFieldValue(values, headerMap, 'no') || '',
-      schd: getFieldValue(values, headerMap, 'schd') || '',
-      stat: getFieldValue(values, headerMap, 'stat') || '',
+      level: getFieldValue(values, headerMap, 'level') || '',
+      prerequisites: [],
+      corequisites: [],
+      exclusions: [],
+      required_for: [],
+      category: getFieldValue(values, headerMap, 'category') || '',
       meets: getFieldValue(values, headerMap, 'meets') || '',
       instructor: getFieldValue(values, headerMap, 'instructor') || '',
       location: getFieldValue(values, headerMap, 'location') || '',
-      capacity: parseInt(getFieldValue(values, headerMap, 'capacity') || '0', 10) || 0,
-      enrolled: parseInt(getFieldValue(values, headerMap, 'enrolled') || '0', 10) || 0
+      
+      // --- START RANDOMIZATION ---
+      // Random capacity (e.g., 10-100)
+      capacity: Math.floor(Math.random() * 91) + 10,
+      // Random enrolled (0 to capacity)
+      // We'll calculate enrolled after capacity is set
+      enrolled: 0, // Placeholder
+      stat: '', // Placeholder, will be set based on enrollment
+      // --- END RANDOMIZATION ---
     };
+    
+    // Calculate random enrollment based on the generated capacity
+    course.enrolled = Math.floor(Math.random() * (course.capacity + 1));
+
+    // Set status based on enrollment vs capacity
+    course.stat = course.enrolled >= course.capacity ? 'Closed' : 'Open';
     
     // Parse meeting times
     if (course.meets) {
       // Handle days
-      const daysPattern = /(MON|TUE|WED|THU|FRI|M|T|W|R|F)+/i;
+      const daysPattern = /(MON|TUE|WED|THU|FRI|M|T|W|R|F)+/gi;
       const daysMatch = course.meets.match(daysPattern);
       if (daysMatch) {
-        course.days = daysMatch[0];
+        course.days = daysMatch.flatMap(d => d.split(/(?=[A-Z])/i));
       }
       
       // Handle times
@@ -111,43 +129,46 @@ export const getCourseById = (courses: Course[], courseId: string): Course | und
   return courses.find(course => course.course_id === courseId);
 };
 
-export const getRecommendedCourses = (
+export const getRecommendedCourses = async (
   courses: Course[],
   interests: string,
   completedCourses: Set<string>
-): Recommendation[] => {
+): Promise<Recommendation[]> => {
+  console.log("[getRecommendedCourses] Starting. Interests:", interests, "Total courses:", courses.length, "Completed:", completedCourses.size);
   if (!interests) return [];
-  
-  const interestsLower = interests.toLowerCase();
-  const interestKeywords = new Set(interestsLower.split(/\s+/));
-  const recommendations: Recommendation[] = [];
-  
-  courses.forEach(course => {
-    if (!completedCourses.has(course.course_id)) {
-      let score = 0;
-      const courseText = `${course.course_name} ${course.department}`.toLowerCase();
-      
-      interestKeywords.forEach(keyword => {
-        if (keyword && courseText.includes(keyword)) {
-          score += 1;
-        }
-      });
-      
-      if (score > 0) {
-        recommendations.push({
-          course_id: course.course_id,
-          title: course.course_name,
-          description: course.description || '',
-          match_reason: `Matches ${score} of your interest keywords`,
-          course,
-          reason: `Matches ${score} of your interest keywords`,
-          score
-        });
-      }
-    }
+
+  // 1. Filter out completed courses
+  const availableCourses = courses.filter(course => !completedCourses.has(course.course_id));
+
+  // 2. Pre-filter based on interests to reduce payload size
+  const interestKeywords = interests.toLowerCase().split(/\s+/).filter(kw => kw.length > 2); // Simple keyword extraction
+  console.log("[getRecommendedCourses] Interest Keywords:", interestKeywords);
+  const preFilteredCandidates = availableCourses.filter(course => {
+    const courseText = `${course.course_name} ${course.description || ''}`.toLowerCase();
+    // Keep course if any keyword matches
+    return interestKeywords.some(kw => courseText.includes(kw));
   });
-  
-  return recommendations.sort((a, b) => b.score - a.score).slice(0, 5);
+
+  // Limit the number of candidates further if still too large (e.g., max 200)
+  const MAX_CANDIDATES = 200;
+  const finalCandidateCourses = preFilteredCandidates.length > MAX_CANDIDATES
+    ? preFilteredCandidates.slice(0, MAX_CANDIDATES)
+    : preFilteredCandidates;
+  console.log(`[getRecommendedCourses] Pre-filtered candidates: ${preFilteredCandidates.length}, Final candidates (max ${MAX_CANDIDATES}): ${finalCandidateCourses.length}`);
+
+  if (finalCandidateCourses.length === 0) {
+    console.log("[getRecommendedCourses] No courses found matching keywords, returning empty.");
+    // Optionally, could fall back to a broader search or return empty
+    return [];
+  }
+
+  console.log(`Sending ${finalCandidateCourses.length} pre-filtered courses to DeepSeek API.`);
+
+  // 3. Use DeepSeek for semantic search on the smaller, pre-filtered list
+  console.log("[getRecommendedCourses] Calling semanticSearchDeepseek...");
+  const result = await semanticSearchDeepseek(interests, finalCandidateCourses);
+  console.log("[getRecommendedCourses] Received result from semanticSearchDeepseek:", result);
+  return result;
 };
 
 export const defaultRequirements: Requirements = {

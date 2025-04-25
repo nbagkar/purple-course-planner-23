@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -114,7 +113,8 @@ const Index = () => {
     }
   };
 
-  const handleGetRecommendations = () => {
+  const handleGetRecommendations = async () => {
+    console.log("[Index] Handling GetRecommendations. Interests:", interests, "Courses loaded:", courses.length);
     if (!interests.trim()) {
       toast.error('Please enter your interests first');
       return;
@@ -125,13 +125,20 @@ const Index = () => {
       return;
     }
     
-    const recs = getRecommendedCourses(courses, interests, completedCourses);
-    setRecommendations(recs);
-    
-    if (recs.length === 0) {
-      toast.info('No matching courses found. Try different interest keywords.');
-    } else {
-      toast.success(`Found ${recs.length} recommended courses`);
+    try {
+      console.log("[Index] Calling getRecommendedCourses...");
+      const recs = await getRecommendedCourses(courses, interests, completedCourses);
+      console.log("[Index] Received recommendations:", recs);
+      setRecommendations(recs);
+      
+      if (recs.length === 0) {
+        toast.info('No matching courses found. Try different interest keywords.');
+      } else {
+        toast.success(`Found ${recs.length} recommended courses`);
+      }
+    } catch (error) {
+      console.error('Error getting recommendations:', error);
+      toast.error('Failed to get course recommendations. Please try again.');
     }
   };
 

@@ -1,10 +1,10 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Recommendation } from '@/models/types';
+import { Loader2 } from 'lucide-react';
 
 interface CourseRecommendationsProps {
   recommendations: Recommendation[];
@@ -21,6 +21,18 @@ const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
   onGetRecommendations,
   onAddCourse
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetRecommendations = async () => {
+    console.log("[CourseRecommendations] Button clicked. Interests:", interests);
+    setIsLoading(true);
+    try {
+      await onGetRecommendations();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -42,11 +54,18 @@ const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
           </div>
           
           <Button 
-            onClick={onGetRecommendations}
-            disabled={!interests.trim()}
+            onClick={handleGetRecommendations}
+            disabled={!interests.trim() || isLoading}
             className="w-full bg-nyu-purple hover:bg-opacity-90"
           >
-            Get Recommendations
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Getting Recommendations...
+              </>
+            ) : (
+              'Get Recommendations'
+            )}
           </Button>
           
           {recommendations.length > 0 && (
@@ -77,7 +96,7 @@ const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
             </ScrollArea>
           )}
           
-          {recommendations.length === 0 && interests.trim() && (
+          {recommendations.length === 0 && interests.trim() && !isLoading && (
             <p className="text-center py-4 text-muted-foreground">
               Enter your interests and click "Get Recommendations" to see courses that match your interests.
             </p>

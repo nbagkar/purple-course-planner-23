@@ -16,6 +16,7 @@ export interface Course {
   location?: string;
   enrolled: number;
   capacity: number;
+  stat: string;
   days?: string[];
   start_time?: string;
   end_time?: string;

@@ -8,6 +8,14 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      // Proxy requests starting with /api/deepseek
+      '/api/deepseek': {
+        target: 'https://api.deepseek.com',
+        changeOrigin: true, // Needed for virtual hosted sites
+        rewrite: (path) => path.replace(/^\/api\/deepseek/, ''), // Remove the prefix
+      },
+    },
   },
   plugins: [
     react(),

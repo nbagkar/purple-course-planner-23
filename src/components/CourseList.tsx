@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -47,37 +46,42 @@ const CourseList: React.FC<CourseListProps> = ({
       <CardContent>
         <ScrollArea className="h-[400px] pr-4">
           <div className="space-y-4">
-            {courses.map((course) => (
-              <div 
-                key={course.course_id} 
-                className="flex items-start space-x-3 p-3 rounded-md hover:bg-gray-50 transition-colors"
-              >
-                <Checkbox 
-                  id={course.course_id}
-                  checked={selectedCourses.has(course.course_id)}
-                  onCheckedChange={(checked) => onSelectCourse(course.course_id, !!checked)}
-                />
-                <div>
-                  <label 
-                    htmlFor={course.course_id} 
-                    className="font-medium cursor-pointer"
-                  >
-                    {course.course_id}: {course.course_name}
-                  </label>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    <p>Credits: {course.credits} | Schedule: {course.meets}</p>
-                    {course.instructor && <p>Instructor: {course.instructor}</p>}
-                    {course.location && <p>Location: {course.location}</p>}
-                    <p>
-                      Enrollment: {course.enrolled}/{course.capacity} 
-                      {course.enrolled >= course.capacity && 
-                        <span className="text-red-500 ml-1">CLOSED</span>
-                      }
-                    </p>
+            {courses.map((course) => {
+              const isClosed = course.stat === 'Closed';
+              return (
+                <div 
+                  key={course.course_id} 
+                  className={`flex items-start space-x-3 p-3 rounded-md transition-colors ${isClosed ? 'opacity-60' : 'hover:bg-gray-50'}`}
+                >
+                  <Checkbox 
+                    id={course.course_id}
+                    checked={selectedCourses.has(course.course_id)}
+                    onCheckedChange={(checked) => onSelectCourse(course.course_id, !!checked)}
+                    disabled={isClosed}
+                    aria-label={`Select course ${course.course_id}`}
+                  />
+                  <div className={`${isClosed ? 'cursor-not-allowed' : ''}`}>
+                    <label 
+                      htmlFor={course.course_id} 
+                      className={`font-medium ${isClosed ? 'text-gray-500 cursor-not-allowed' : 'cursor-pointer'}`}
+                    >
+                      {course.course_id}: {course.course_name}
+                    </label>
+                    <div className="text-sm text-muted-foreground mt-1">
+                      <p>Credits: {course.credits} | Schedule: {course.meets}</p>
+                      {course.instructor && <p>Instructor: {course.instructor}</p>}
+                      {course.location && <p>Location: {course.location}</p>}
+                      <p>
+                        Enrollment: {course.enrolled}/{course.capacity} 
+                        <span className={`ml-2 font-semibold ${isClosed ? 'text-red-500' : 'text-green-600'}`}>
+                          {course.stat}
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </ScrollArea>
       </CardContent>
