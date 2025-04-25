@@ -14,10 +14,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 262 83% 75%;  /* NYU Purple */
+    --primary: 262 83% 65%;  /* More vibrant NYU Purple */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 262 83% 90%; /* Light purple */
+    --secondary: 262 83% 80%; /* Light purple */
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -31,25 +31,9 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 262 83% 75%;
+    --ring: 262 83% 65%;  /* Ring matches primary */
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -69,22 +53,22 @@
   }
   
   .card-container {
-    @apply bg-white rounded-lg shadow-md p-6 animate-fade-in;
+    @apply bg-white rounded-lg shadow-md p-6 animate-fade-in border-2 border-nyu-purple/20;
   }
   
   .section-title {
-    @apply text-xl font-semibold text-nyu-purple mb-4;
+    @apply text-xl font-semibold text-nyu-deep-purple mb-4;
   }
   
   .nyu-button-primary {
-    @apply bg-nyu-purple text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-all;
+    @apply bg-nyu-purple text-white px-4 py-2 rounded-md hover:bg-nyu-deep-purple transition-all;
   }
   
   .nyu-button-secondary {
-    @apply bg-nyu-silver text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-all;
+    @apply bg-nyu-lavender text-nyu-deep-purple px-4 py-2 rounded-md hover:bg-opacity-90 transition-all;
   }
   
   .nyu-input {
-    @apply border-2 border-gray-300 rounded-md px-4 py-2 focus:border-nyu-purple focus:outline-none transition-colors;
+    @apply border-2 border-nyu-purple/30 rounded-md px-4 py-2 focus:border-nyu-deep-purple focus:outline-none transition-colors;
   }
 }
