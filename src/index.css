@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,45 +31,46 @@
     --border: 265 89% 78%;
     --input: 265 89% 78%;
     --ring: 265 89% 78%;
-
-    --radius: 0.5rem;
+    
+    --radius: 0.75rem;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border selection:bg-primary/10 selection:text-primary;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
+  
+  html {
+    @apply scroll-smooth;
   }
 }
 
 @layer components {
   .glass-effect {
-    @apply backdrop-blur-md bg-white/10 border border-white/20 shadow-xl;
+    @apply backdrop-blur-md bg-white/10 border border-primary/20 shadow-lg;
   }
   
-  .gradient-border {
-    @apply border-2 border-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/60;
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) padding-box, 
-      linear-gradient(#fff 0 0);
-    mask: 
-      linear-gradient(#fff 0 0) padding-box, 
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
+  .stripe-gradient {
+    @apply bg-gradient-to-br from-primary/5 via-primary/3 to-transparent;
   }
-
+  
   .card-hover {
     @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
   }
-
+  
+  .card-gradient {
+    @apply bg-gradient-to-br from-card to-secondary/80 backdrop-blur-sm border-primary/20;
+  }
+  
   .input-modern {
     @apply bg-secondary/50 border-0 focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50;
   }
-
+  
   .button-modern {
     @apply bg-primary hover:bg-primary/90 text-white transition-colors duration-200;
   }
