@@ -1,16 +1,15 @@
-
 export interface Course {
   course_id: string;
   title: string;
   description: string;
   credits: number;
   department: string;
-  level?: string;
-  prerequisites?: string[];
-  corequisites?: string[];
-  exclusions?: string[];
-  required_for?: string[];
-  category?: string;
+  level: string;
+  prerequisites: string[];
+  corequisites: string[];
+  exclusions: string[];
+  required_for: string[];
+  category: string;
   course_name: string;
   meets: string;
   instructor?: string;
@@ -20,9 +19,6 @@ export interface Course {
   days?: string[];
   start_time?: string;
   end_time?: string;
-  section?: string;
-  schd?: string;
-  stat?: string;
 }
 
 export interface Recommendation {

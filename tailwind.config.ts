@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,17 +18,12 @@ export default {
       }
     },
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        'nyu-purple': '#9b87f5',
-        'nyu-light-purple': '#E5DEFF',
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))"
@@ -49,6 +43,10 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))"
+        },
+        nyu: {
+          'purple': '#9b87f5',    // A nicer purple color
+          'silver': '#9F9EA1',
         }
       },
       borderRadius: {
