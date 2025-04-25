@@ -1,4 +1,3 @@
-
 export interface Course {
   course_id: string;
   title: string;
@@ -38,16 +37,24 @@ export interface Requirements {
   notes: string;
   electives_required: number;
   courses: string[];
+  by_category: Record<string, CategoryRequirement>;
+}
+
+export interface CategoryRequirement {
+  required_courses: string[];
+  credits_required: number;
+  notes?: string;
+  electives_required?: number;
 }
 
 export interface CategoryMissing {
-  category: string;
   missing: string[];
   credits_required: number;
   notes?: string;
+  electives_required?: number;
 }
 
 export interface MissingRequirements {
-  [category: string]: CategoryMissing;
+  required_courses: string[];
+  by_category: Record<string, CategoryMissing>;
 }
-

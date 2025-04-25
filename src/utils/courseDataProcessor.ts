@@ -1,4 +1,3 @@
-
 import { Course, Recommendation, Requirements, MissingRequirements } from '../models/types';
 
 export const parseCsvToJson = (csvContent: string): Course[] => {
@@ -136,9 +135,13 @@ export const getRecommendedCourses = (
       
       if (score > 0) {
         recommendations.push({
+          course_id: course.course_id,
+          title: course.course_name,
+          description: course.description || '',
+          match_reason: `Matches ${score} of your interest keywords`,
           course,
-          score,
-          reason: `Matches ${score} of your interest keywords`
+          reason: `Matches ${score} of your interest keywords`,
+          score
         });
       }
     }
@@ -148,7 +151,7 @@ export const getRecommendedCourses = (
 };
 
 export const defaultRequirements: Requirements = {
-  required_courses: new Set([
+  required_courses: [
     "MATH-UB 121",
     "MULT-UB 100",
     "CORE-UA 400",
@@ -174,7 +177,7 @@ export const defaultRequirements: Requirements = {
     "BTEP-UB 4",
     "CSC-UB 101",
     "CSC-UB 102"
-  ]),
+  ],
   by_category: {
     "Liberal Arts Core": {
       required_courses: [
@@ -222,8 +225,8 @@ export const defaultRequirements: Requirements = {
         "BTEP-UB 2"
       ],
       credits_required: 13,
-      electives_required: 1,
-      notes: "Must complete Startup Lab (3cr) and NYC Entrepreneurship Lab (3cr)"
+      notes: "Must complete Startup Lab (3cr) and NYC Entrepreneurship Lab (3cr)",
+      electives_required: 1
     },
     "Technology Core": {
       required_courses: [
@@ -236,36 +239,39 @@ export const defaultRequirements: Requirements = {
       electives_required: 1
     }
   },
-  total_credits_needed: 128
+  credits_required: 128,
+  notes: "",
+  electives_required: 0,
+  courses: []
 };
 
 export const getMissingRequirements = (
   completedCourses: Set<string>
 ): MissingRequirements => {
-  const missingRequiredCourses = new Set<string>();
+  const missingRequiredCourses: string[] = [];
   defaultRequirements.required_courses.forEach(course => {
     if (!completedCourses.has(course)) {
-      missingRequiredCourses.add(course);
+      missingRequiredCourses.push(course);
     }
   });
   
   const missingByCategory: Record<string, CategoryMissing> = {};
   
   Object.entries(defaultRequirements.by_category).forEach(([category, reqs]) => {
-    const missingCourses = new Set<string>();
+    const missingCourses: string[] = [];
     
     reqs.required_courses.forEach(course => {
       if (!completedCourses.has(course)) {
-        missingCourses.add(course);
+        missingCourses.push(course);
       }
     });
     
-    if (missingCourses.size > 0) {
+    if (missingCourses.length > 0) {
       missingByCategory[category] = {
-        courses: missingCourses,
+        missing: missingCourses,
         credits_required: reqs.credits_required,
-        notes: reqs.notes || '',
-        electives_required: reqs.electives_required || 0
+        notes: reqs.notes,
+        electives_required: reqs.electives_required
       };
     }
   });

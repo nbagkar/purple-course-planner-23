@@ -7,17 +7,20 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Button } from '@/components/ui/button';
 import { Course, MissingRequirements } from '@/models/types';
 import { defaultRequirements } from '@/utils/courseDataProcessor';
+import { Plus } from 'lucide-react';
 
 interface RequirementsAnalysisProps {
   missingRequirements: MissingRequirements | null;
   completedCourses: Set<string>;
   allCourses: Course[];
+  onAddCompleted?: (courseId: string) => void;
 }
 
 const RequirementsAnalysis: React.FC<RequirementsAnalysisProps> = ({
   missingRequirements,
   completedCourses,
-  allCourses
+  allCourses,
+  onAddCompleted
 }) => {
   if (!missingRequirements) {
     return (
@@ -27,15 +30,15 @@ const RequirementsAnalysis: React.FC<RequirementsAnalysisProps> = ({
         </CardHeader>
         <CardContent>
           <div className="text-center py-6">
-            <p className="text-muted-foreground">Enter completed courses to see your progress</p>
+            <p className="text-muted-foreground">Select completed courses to see your progress</p>
           </div>
         </CardContent>
       </Card>
     );
   }
 
-  const total = defaultRequirements.required_courses.size;
-  const completed = total - missingRequirements.required_courses.size;
+  const total = defaultRequirements.required_courses.length;
+  const completed = total - missingRequirements.required_courses.length;
   const progressPercentage = Math.round((completed / total) * 100);
   
   const getCourseStatus = (courseId: string): { status: string; color: string } => {
@@ -69,7 +72,7 @@ const RequirementsAnalysis: React.FC<RequirementsAnalysisProps> = ({
           
           <ScrollArea className="h-[400px] pr-4">
             <Accordion type="single" collapsible className="w-full">
-              {Object.entries(missingRequirements.by_category).map(([category, reqs]) => (
+              {Object.entries(missingRequirements.by_category || {}).map(([category, reqs]) => (
                 <AccordionItem key={category} value={category}>
                   <AccordionTrigger className="hover:text-nyu-purple">
                     {category}
@@ -84,12 +87,27 @@ const RequirementsAnalysis: React.FC<RequirementsAnalysisProps> = ({
                       <div>
                         <h4 className="font-medium mb-2">Missing Courses:</h4>
                         <ul className="space-y-2">
-                          {Array.from(reqs.courses).map(courseId => {
+                          {Array.from(reqs.missing).map(courseId => {
                             const { status, color } = getCourseStatus(courseId);
+                            const isCompleted = completedCourses.has(courseId);
+                            
                             return (
-                              <li key={courseId} className="flex justify-between">
+                              <li key={courseId} className="flex items-center justify-between gap-2">
                                 <span>{courseId}</span>
-                                <span className={color}>{status}</span>
+                                <div className="flex items-center gap-2">
+                                  <span className={color}>{status}</span>
+                                  {!isCompleted && onAddCompleted && (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => onAddCompleted(courseId)}
+                                      className="h-7 px-2"
+                                    >
+                                      <Plus className="h-4 w-4 mr-1" />
+                                      Add
+                                    </Button>
+                                  )}
+                                </div>
                               </li>
                             );
                           })}
