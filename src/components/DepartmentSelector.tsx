@@ -24,7 +24,7 @@ const DepartmentSelector: React.FC<DepartmentSelectorProps> = ({
   disabled = false
 }) => {
   return (
-    <Card>
+    <Card className="bg-gradient-to-br from-nyu-purple/5 to-nyu-purple/10">
       <CardHeader>
         <CardTitle className="text-nyu-purple">Select Department</CardTitle>
       </CardHeader>
@@ -34,13 +34,17 @@ const DepartmentSelector: React.FC<DepartmentSelectorProps> = ({
           onValueChange={onDepartmentChange}
           disabled={disabled || departments.length === 0}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full bg-white/70 backdrop-blur-sm border-nyu-purple/20 hover:border-nyu-purple/50 transition-colors">
             <SelectValue placeholder="Select a department" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white/80 backdrop-blur-lg border border-nyu-purple/20 shadow-lg">
             <SelectGroup>
               {departments.map((department) => (
-                <SelectItem key={department} value={department}>
+                <SelectItem 
+                  key={department} 
+                  value={department}
+                  className="hover:bg-nyu-purple/10 focus:bg-nyu-purple/20 transition-colors"
+                >
                   {department}
                 </SelectItem>
               ))}
