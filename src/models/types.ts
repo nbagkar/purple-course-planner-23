@@ -1,4 +1,3 @@
-
 export interface Course {
   key: string;
   course_id: string;
@@ -34,8 +33,8 @@ export interface CategoryRequirement {
 export interface CategoryMissing {
   courses: Set<string>;
   credits_required: number;
-  notes: string;
-  electives_required: number;
+  notes?: string;
+  electives_required?: number;
 }
 
 export interface Requirements {

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -149,91 +150,123 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-100">
       <Header />
       
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 gap-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-1">
-              <CourseUploader onCoursesLoaded={handleCoursesLoaded} />
+              <Card className="border-2 border-nyu-purple/20 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="pt-6">
+                  <CourseUploader onCoursesLoaded={handleCoursesLoaded} />
+                </CardContent>
+              </Card>
             </div>
             
             <div className="md:col-span-2">
-              <Tabs defaultValue="completed" className="w-full">
-                <TabsList className="grid grid-cols-2 w-full">
-                  <TabsTrigger value="completed">Completed Courses</TabsTrigger>
-                  <TabsTrigger value="interests">Your Interests</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="completed">
-                  <Card>
-                    <CardContent className="pt-6">
-                      <label className="block text-sm font-medium mb-1">
-                        Enter your completed courses (comma-separated course IDs)
-                      </label>
-                      <Textarea 
-                        placeholder="E.g., ECON-UB 1, MATH-UB 121, CORE-UA 400"
-                        onChange={(e) => handleCompletedCoursesChange(e.target.value)}
-                        className="resize-none"
+              <Card className="border-2 border-nyu-purple/20 shadow-lg">
+                <CardContent className="p-0">
+                  <Tabs defaultValue="completed" className="w-full">
+                    <TabsList className="w-full grid grid-cols-2 bg-nyu-purple rounded-t-lg h-12">
+                      <TabsTrigger 
+                        value="completed" 
+                        className="data-[state=active]:bg-white data-[state=active]:text-nyu-purple text-white hover:text-white/90 transition-colors"
+                      >
+                        Completed Courses
+                      </TabsTrigger>
+                      <TabsTrigger 
+                        value="interests" 
+                        className="data-[state=active]:bg-white data-[state=active]:text-nyu-purple text-white hover:text-white/90 transition-colors"
+                      >
+                        Your Interests
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="completed" className="p-6">
+                      <div className="space-y-4">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Enter your completed courses (comma-separated course IDs)
+                        </label>
+                        <Textarea 
+                          placeholder="E.g., ECON-UB 1, MATH-UB 121, CORE-UA 400"
+                          onChange={(e) => handleCompletedCoursesChange(e.target.value)}
+                          className="resize-none border-nyu-purple/20 focus:border-nyu-purple focus:ring-nyu-purple"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          This will be used to analyze your degree requirements and suggest courses.
+                        </p>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="interests" className="p-6">
+                      <CourseRecommendations
+                        recommendations={recommendations}
+                        interests={interests}
+                        setInterests={setInterests}
+                        onGetRecommendations={handleGetRecommendations}
+                        onAddCourse={handleAddRecommendedCourse}
                       />
-                      <p className="text-xs text-muted-foreground mt-2">
-                        This will be used to analyze your degree requirements and suggest courses.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                
-                <TabsContent value="interests">
-                  <CourseRecommendations
-                    recommendations={recommendations}
-                    interests={interests}
-                    setInterests={setInterests}
-                    onGetRecommendations={handleGetRecommendations}
-                    onAddCourse={handleAddRecommendedCourse}
-                  />
-                </TabsContent>
-              </Tabs>
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
             </div>
           </div>
           
-          <Separator />
+          <Separator className="bg-nyu-purple/20" />
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="space-y-6">
-              <DepartmentSelector 
-                departments={departments}
-                selectedDepartment={selectedDepartment}
-                onDepartmentChange={handleDepartmentChange}
-                disabled={departments.length === 0}
-              />
+              <Card className="border-2 border-nyu-purple/20 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-6">
+                  <DepartmentSelector 
+                    departments={departments}
+                    selectedDepartment={selectedDepartment}
+                    onDepartmentChange={handleDepartmentChange}
+                    disabled={departments.length === 0}
+                  />
+                </CardContent>
+              </Card>
               
-              <RequirementsAnalysis
-                missingRequirements={missingRequirements}
-                completedCourses={completedCourses}
-                allCourses={courses}
-              />
+              <Card className="border-2 border-nyu-purple/20 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-6">
+                  <RequirementsAnalysis
+                    missingRequirements={missingRequirements}
+                    completedCourses={completedCourses}
+                    allCourses={courses}
+                  />
+                </CardContent>
+              </Card>
             </div>
             
             <div className="lg:col-span-2 space-y-6">
-              <CourseList
-                courses={departmentCourses}
-                selectedCourses={selectedCourseIds}
-                onSelectCourse={handleSelectCourse}
-                onAddSelected={handleAddSelected}
-              />
+              <Card className="border-2 border-nyu-purple/20 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-6">
+                  <CourseList
+                    courses={departmentCourses}
+                    selectedCourses={selectedCourseIds}
+                    onSelectCourse={handleSelectCourse}
+                    onAddSelected={handleAddSelected}
+                  />
+                </CardContent>
+              </Card>
               
-              <SelectedCourses
-                selectedCourses={plannedCourses}
-                onRemoveCourse={handleRemoveCourse}
-              />
+              <Card className="border-2 border-nyu-purple/20 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-6">
+                  <SelectedCourses
+                    selectedCourses={plannedCourses}
+                    onRemoveCourse={handleRemoveCourse}
+                  />
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </main>
       
-      <footer className="mt-12 py-6 bg-gray-100 border-t">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-500">
+      <footer className="mt-12 py-6 bg-gradient-to-r from-nyu-purple/5 to-nyu-silver/5 border-t border-nyu-purple/10">
+        <div className="container mx-auto px-4 text-center text-sm text-gray-600">
           <p>NYU Course Planner - A tool for NYU students to plan their academic journey</p>
           <p className="mt-1">© {new Date().getFullYear()} New York University</p>
         </div>
