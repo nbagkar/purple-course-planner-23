@@ -1,16 +1,25 @@
 
 import React from 'react';
+import { Layers } from 'lucide-react';
 
 const Header = () => {
   return (
-    <header className="w-full gradient-header text-white py-8 shadow-lg relative overflow-hidden">
-      <div className="absolute inset-0 backdrop-blur-sm"></div>
-      <div className="container mx-auto px-4 md:px-6 flex flex-col items-center justify-center relative z-10">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
-          Course Planner
+    <header className="relative w-full overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
+      <div className="absolute inset-0 bg-[url('/lovable-uploads/0ec13942-3519-42c0-b16a-9d5e618618fc.png')] opacity-10 bg-cover bg-center"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/80"></div>
+      
+      <div className="container relative mx-auto px-4 py-12 md:py-16">
+        <div className="flex items-center gap-3 mb-4">
+          <Layers className="h-8 w-8 text-sky-400" />
+          <h2 className="text-xl font-medium tracking-wide text-sky-400">Course Planner</h2>
+        </div>
+        
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white max-w-3xl">
+          Plan Your Academic Journey with Precision
         </h1>
-        <p className="mt-3 text-lg md:text-xl text-white/90 font-light">
-          Plan your academic journey with ease
+        
+        <p className="mt-4 text-lg md:text-xl text-slate-300 max-w-2xl">
+          Streamline your course selection process and stay on track with your degree requirements
         </p>
       </div>
     </header>

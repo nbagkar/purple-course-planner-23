@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -20,47 +19,46 @@ export default {
     },
     extend: {
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))'
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))"
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))'
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))"
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))'
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))"
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))'
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))"
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))'
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))"
         },
         theme: {
-          'primary': '#1EAEDB',      // Bright blue
-          'secondary': '#33C3F0',    // Sky blue
-          'accent': '#F97316',       // Vibrant orange
-          'muted': '#D3E4FD',        // Soft blue
-          'background': '#F1F0FB',   // Soft gray
-          'success': '#10B981',      // Green
-          'warning': '#F59E0B',      // Amber
-          'error': '#EF4444',        // Red
-          'info': '#0EA5E9'          // Ocean blue
+          'primary': '#0EA5E9',    // Sky blue
+          'secondary': '#1E293B',  // Slate dark
+          'accent': '#F97316',     // Orange
+          'background': '#0F172A', // Slate darker
+          'success': '#10B981',    // Green
+          'warning': '#F59E0B',    // Amber
+          'error': '#EF4444',      // Red
+          'info': '#3B82F6'        // Blue
         }
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)"
       },
       keyframes: {
         'accordion-down': {

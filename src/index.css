@@ -5,35 +5,33 @@
 
 @layer base {
   :root {
-    --background: 240 10% 98%;
-    --foreground: 222 47% 11%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-
-    --primary: 199 84% 55%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 199 89% 48%;
     --primary-foreground: 210 40% 98%;
-
-    --secondary: 199 84% 77%;
-    --secondary-foreground: 222 47% 11%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 24 95% 53%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 199 84% 55%;
-
-    --radius: 0.75rem;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9;
   }
 }
 
@@ -41,43 +39,18 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-gradient-to-br from-theme-background to-white text-foreground;
+    @apply bg-background text-foreground;
   }
 }
 
 @layer components {
-  .gradient-header {
-    @apply bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-accent;
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/10 border border-white/20 shadow-xl;
   }
   
-  .card-container {
-    @apply bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-theme-muted/20;
-  }
-  
-  .section-title {
-    @apply text-xl font-semibold text-theme-primary mb-4;
-  }
-  
-  .button-primary {
-    @apply bg-theme-primary text-white px-4 py-2 rounded-md hover:bg-theme-secondary transition-all;
-  }
-  
-  .button-secondary {
-    @apply bg-theme-muted text-theme-primary px-4 py-2 rounded-md hover:bg-opacity-90 transition-all;
-  }
-  
-  .input-primary {
-    @apply border-2 border-theme-muted/30 rounded-md px-4 py-2 focus:border-theme-primary focus:outline-none transition-colors;
-  }
-
-  .glass-card {
-    @apply backdrop-blur-md bg-white/80 rounded-xl shadow-lg border border-white/20;
-  }
-
   .gradient-border {
-    @apply border-2 border-transparent bg-gradient-to-r from-theme-primary via-theme-accent to-theme-secondary;
+    @apply border-2 border-transparent bg-gradient-to-r from-sky-400 via-sky-500 to-sky-600;
     -webkit-mask: 
       linear-gradient(#fff 0 0) padding-box, 
       linear-gradient(#fff 0 0);
@@ -86,5 +59,17 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
+  }
+
+  .input-modern {
+    @apply bg-secondary/50 border-0 focus:ring-2 focus:ring-sky-500 placeholder:text-muted-foreground/50;
+  }
+
+  .button-modern {
+    @apply bg-sky-500 hover:bg-sky-600 text-white transition-colors duration-200;
   }
 }
