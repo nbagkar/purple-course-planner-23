@@ -1,8 +1,9 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 
 import Header from '@/components/Header';
 import CourseUploader from '@/components/CourseUploader';
@@ -34,19 +35,16 @@ const Index = () => {
   const [interests, setInterests] = useState<string>('');
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
-  // Handle courses loaded from CSV
   const handleCoursesLoaded = (loadedCourses: Course[]) => {
     setCourses(loadedCourses);
     const depts = getDepartments(loadedCourses);
     setDepartments(depts);
     
-    // Reset selections
     setSelectedDepartment('');
     setDepartmentCourses([]);
     setSelectedCourseIds(new Set());
   };
 
-  // Handle department change
   const handleDepartmentChange = (department: string) => {
     setSelectedDepartment(department);
     const filteredCourses = getDepartmentCourses(courses, department);
@@ -54,7 +52,6 @@ const Index = () => {
     setSelectedCourseIds(new Set());
   };
 
-  // Handle course selection
   const handleSelectCourse = (courseId: string, isChecked: boolean) => {
     const newSelectedCourses = new Set(selectedCourseIds);
     if (isChecked) {
@@ -65,7 +62,6 @@ const Index = () => {
     setSelectedCourseIds(newSelectedCourses);
   };
 
-  // Add selected courses to plan
   const handleAddSelected = () => {
     if (selectedCourseIds.size === 0) return;
     
@@ -89,7 +85,6 @@ const Index = () => {
     toast.success(`Added ${selectedCourseIds.size} course(s) to your plan`);
   };
 
-  // Remove course from plan
   const handleRemoveCourse = (courseId: string) => {
     const newPlannedCourses = plannedCourses.filter(course => course.course_id !== courseId);
     const newCoursesSelected = new Set(coursesSelected);
@@ -101,7 +96,6 @@ const Index = () => {
     toast.success('Course removed from your plan');
   };
 
-  // Update completed courses from comma-separated string
   const handleCompletedCoursesChange = (completedCoursesStr: string) => {
     const coursesSet = new Set<string>(
       completedCoursesStr.split(',')
@@ -111,7 +105,6 @@ const Index = () => {
     
     setCompletedCourses(coursesSet);
     
-    // Update requirements analysis
     if (coursesSet.size > 0) {
       const missing = getMissingRequirements(coursesSet);
       setMissingRequirements(missing);
@@ -120,7 +113,6 @@ const Index = () => {
     }
   };
 
-  // Get course recommendations
   const handleGetRecommendations = () => {
     if (!interests.trim()) {
       toast.error('Please enter your interests first');
@@ -142,7 +134,6 @@ const Index = () => {
     }
   };
 
-  // Add recommended course to plan
   const handleAddRecommendedCourse = (courseId: string) => {
     if (coursesSelected.has(courseId)) {
       toast.info('This course is already in your plan');
