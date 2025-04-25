@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -45,7 +46,7 @@ export default {
           foreground: "hsl(var(--accent-foreground))"
         },
         nyu: {
-          'purple': '#9b87f5',    // A nicer purple color
+          'purple': 'hsl(235, 85%, 65%)',
           'silver': '#9F9EA1',
         }
       },

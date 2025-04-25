@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
     
-    --primary: 265 89% 78%;
+    --primary: 235 85% 65%;
     --primary-foreground: 210 40% 98%;
     
     --secondary: 210 40% 96.1%;
@@ -23,17 +23,17 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
     
-    --accent: 265 89% 78%;
+    --accent: 235 85% 65%;
     --accent-foreground: 222.2 47.4% 11.2%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 265 89% 78%;
-    --input: 265 89% 78%;
-    --ring: 265 89% 78%;
-
-    --radius: 0.5rem;
+    --border: 235 85% 65%;
+    --input: 235 85% 65%;
+    --ring: 235 85% 65%;
+    
+    --radius: 0.75rem;
   }
 }
 
@@ -42,13 +42,13 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-white to-primary/5 min-h-screen text-foreground antialiased;
   }
 }
 
 @layer components {
   .glass-effect {
-    @apply backdrop-blur-md bg-white/10 border border-white/20 shadow-xl;
+    @apply backdrop-blur-md bg-white/90 border border-white/20 shadow-lg;
   }
   
   .gradient-border {
@@ -68,10 +68,10 @@
   }
 
   .input-modern {
-    @apply bg-secondary/50 border-0 focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50;
+    @apply bg-white/50 border-0 focus:ring-2 focus:ring-primary/50 shadow-sm;
   }
 
   .button-modern {
-    @apply bg-primary hover:bg-primary/90 text-white transition-colors duration-200;
+    @apply bg-primary hover:bg-primary/90 text-white shadow-sm transition-all duration-200;
   }
 }
