@@ -1,4 +1,4 @@
-import { Course, Recommendation, Requirements, MissingRequirements } from '../models/types';
+import { Course, Recommendation, Requirements, MissingRequirements, CategoryMissing } from '../models/types';
 
 export const parseCsvToJson = (csvContent: string): Course[] => {
   const lines = csvContent.split('\n');
@@ -49,10 +49,10 @@ export const parseCsvToJson = (csvContent: string): Course[] => {
     
     // Create course object
     const course: Course = {
-      key: getFieldValue(values, headerMap, 'key') || '',
       course_id: courseCode,
       course_name: getFieldValue(values, headerMap, 'title') || '',
-      credits: 4, // Default to 4 credits
+      description: '',
+      credits: 4,
       department,
       section: getFieldValue(values, headerMap, 'no') || '',
       schd: getFieldValue(values, headerMap, 'schd') || '',
@@ -66,19 +66,10 @@ export const parseCsvToJson = (csvContent: string): Course[] => {
     
     // Parse meeting times
     if (course.meets) {
-      // Handle days
       const daysPattern = /(MON|TUE|WED|THU|FRI|M|T|W|R|F)+/i;
       const daysMatch = course.meets.match(daysPattern);
       if (daysMatch) {
-        course.days = daysMatch[0];
-      }
-      
-      // Handle times
-      const timePattern = /(\d{1,2}:\d{2}(?:AM|PM)?)\s*-\s*(\d{1,2}:\d{2}(?:AM|PM)?)/i;
-      const timeMatch = course.meets.match(timePattern);
-      if (timeMatch) {
-        course.start_time = timeMatch[1];
-        course.end_time = timeMatch[2];
+        course.days = daysMatch[0].split('').map(day => day);
       }
     }
     
