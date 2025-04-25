@@ -25,6 +25,58 @@ export const getCourseById = (courses: Course[], courseId: string): Course | und
   return courses.find(course => course.course_id === courseId);
 };
 
+export const parseCsvToJson = (csvContent: string): Course[] => {
+  const lines = csvContent.split('\n');
+  const headers = lines[0].split(',').map(header => header.trim());
+  
+  return lines.slice(1).map(line => {
+    const values = line.split(',').map(value => value.trim());
+    const course: any = {};
+    
+    headers.forEach((header, index) => {
+      course[header] = values[index];
+    });
+    
+    return {
+      ...course,
+      course_id: course.course_id || '',
+      course_name: course.course_name || '',
+      title: course.title || course.course_name || '',
+      description: course.description || '',
+      department: course.department || '',
+      credits: parseInt(course.credits) || 0,
+      prerequisites: course.prerequisites || [],
+      capacity: parseInt(course.capacity) || 30,
+      enrolled: parseInt(course.enrolled) || 0,
+    } as Course;
+  }).filter(course => course.course_id && course.course_name);
+};
+
+export const defaultRequirements: Requirements = {
+  required_courses: ['CORE-UA 400', 'MATH-UA 121', 'CSC-UA 101'],
+  credits_required: 128,
+  notes: 'Consult the NYU Bulletin for detailed requirements.',
+  electives_required: 64,
+  courses: [],
+  by_category: {
+    'Math': {
+      required_courses: ['MATH-UA 121', 'MATH-UA 122'],
+      credits_required: 8,
+      electives_required: 0,
+    },
+    'Science': {
+      required_courses: ['CHEM-UA 125', 'PHYS-UA 121'],
+      credits_required: 8,
+      electives_required: 0,
+    },
+    'Core': {
+      required_courses: ['CORE-UA 400'],
+      credits_required: 4,
+      electives_required: 0,
+    }
+  }
+};
+
 export const getRecommendedCourses = (courses: Course[], interests: string, completedCourses: Set<string>): Recommendation[] => {
   const keywords = interests.toLowerCase().split(' ');
 
