@@ -44,15 +44,9 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))"
         },
-        theme: {
-          'primary': '#0EA5E9',    // Sky blue
-          'secondary': '#1E293B',  // Slate dark
-          'accent': '#F97316',     // Orange
-          'background': '#0F172A', // Slate darker
-          'success': '#10B981',    // Green
-          'warning': '#F59E0B',    // Amber
-          'error': '#EF4444',      // Red
-          'info': '#3B82F6'        // Blue
+        nyu: {
+          'purple': '#9b87f5',    // A nicer purple color
+          'silver': '#9F9EA1',
         }
       },
       borderRadius: {

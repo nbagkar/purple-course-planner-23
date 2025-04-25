@@ -5,33 +5,35 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
     
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
     
-    --primary: 199 89% 48%;
+    --primary: 265 89% 78%;
     --primary-foreground: 210 40% 98%;
     
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
     
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
     
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 265 89% 78%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9;
+    --border: 265 89% 78%;
+    --input: 265 89% 78%;
+    --ring: 265 89% 78%;
+
+    --radius: 0.5rem;
   }
 }
 
@@ -50,7 +52,7 @@
   }
   
   .gradient-border {
-    @apply border-2 border-transparent bg-gradient-to-r from-sky-400 via-sky-500 to-sky-600;
+    @apply border-2 border-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/60;
     -webkit-mask: 
       linear-gradient(#fff 0 0) padding-box, 
       linear-gradient(#fff 0 0);
@@ -66,10 +68,10 @@
   }
 
   .input-modern {
-    @apply bg-secondary/50 border-0 focus:ring-2 focus:ring-sky-500 placeholder:text-muted-foreground/50;
+    @apply bg-secondary/50 border-0 focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50;
   }
 
   .button-modern {
-    @apply bg-sky-500 hover:bg-sky-600 text-white transition-colors duration-200;
+    @apply bg-primary hover:bg-primary/90 text-white transition-colors duration-200;
   }
 }
