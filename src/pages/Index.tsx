@@ -27,9 +27,9 @@ const Index = () => {
   const [departments, setDepartments] = useState<string[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState<string>('');
   const [departmentCourses, setDepartmentCourses] = useState<Course[]>([]);
-  const [selectedCourseIds, setSelectedCourseIds] = useState<Set<string>>(new Set());
+  const [selectedCourseKeys, setSelectedCourseKeys] = useState<Set<string>>(new Set());
   const [plannedCourses, setPlannedCourses] = useState<Course[]>([]);
-  const [coursesSelected, setCoursesSelected] = useState<Set<string>>(new Set());
+  const [plannedCourseKeys, setPlannedCourseKeys] = useState<Set<string>>(new Set());
   const [completedCourses, setCompletedCourses] = useState<Set<string>>(new Set());
   const [missingRequirements, setMissingRequirements] = useState<MissingRequirements | null>(null);
   const [interests, setInterests] = useState<string>('');
@@ -42,56 +42,60 @@ const Index = () => {
     
     setSelectedDepartment('');
     setDepartmentCourses([]);
-    setSelectedCourseIds(new Set());
+    setSelectedCourseKeys(new Set());
   };
 
   const handleDepartmentChange = (department: string) => {
     setSelectedDepartment(department);
     const filteredCourses = getDepartmentCourses(courses, department);
     setDepartmentCourses(filteredCourses);
-    setSelectedCourseIds(new Set());
+    setSelectedCourseKeys(new Set());
   };
 
-  const handleSelectCourse = (courseId: string, isChecked: boolean) => {
-    const newSelectedCourses = new Set(selectedCourseIds);
+  const handleSelectCourse = (uniqueKey: string, isChecked: boolean) => {
+    const newSelectedKeys = new Set(selectedCourseKeys);
     if (isChecked) {
-      newSelectedCourses.add(courseId);
+      newSelectedKeys.add(uniqueKey);
     } else {
-      newSelectedCourses.delete(courseId);
+      newSelectedKeys.delete(uniqueKey);
     }
-    setSelectedCourseIds(newSelectedCourses);
+    setSelectedCourseKeys(newSelectedKeys);
   };
 
   const handleAddSelected = () => {
-    if (selectedCourseIds.size === 0) return;
+    if (selectedCourseKeys.size === 0) return;
     
     const newPlannedCourses = [...plannedCourses];
-    const newCoursesSelected = new Set(coursesSelected);
-    
-    selectedCourseIds.forEach(courseId => {
-      if (!coursesSelected.has(courseId)) {
-        const course = getCourseById(courses, courseId);
+    const newPlannedKeys = new Set(plannedCourseKeys);
+    let addedCount = 0;
+
+    selectedCourseKeys.forEach(uniqueKey => {
+      if (!newPlannedKeys.has(uniqueKey)) {
+        const course = departmentCourses.find(c => c.unique_key === uniqueKey);
         if (course) {
           newPlannedCourses.push(course);
-          newCoursesSelected.add(courseId);
+          newPlannedKeys.add(uniqueKey);
+          addedCount++;
         }
       }
     });
     
     setPlannedCourses(newPlannedCourses);
-    setCoursesSelected(newCoursesSelected);
-    setSelectedCourseIds(new Set());
+    setPlannedCourseKeys(newPlannedKeys);
+    setSelectedCourseKeys(new Set());
     
-    toast.success(`Added ${selectedCourseIds.size} course(s) to your plan`);
+    if (addedCount > 0) {
+      toast.success(`Added ${addedCount} course(s) to your plan`);
+    }
   };
 
-  const handleRemoveCourse = (courseId: string) => {
-    const newPlannedCourses = plannedCourses.filter(course => course.course_id !== courseId);
-    const newCoursesSelected = new Set(coursesSelected);
-    newCoursesSelected.delete(courseId);
+  const handleRemoveCourse = (uniqueKey: string) => {
+    const newPlannedCourses = plannedCourses.filter(course => course.unique_key !== uniqueKey);
+    const newPlannedKeys = new Set(plannedCourseKeys);
+    newPlannedKeys.delete(uniqueKey);
     
     setPlannedCourses(newPlannedCourses);
-    setCoursesSelected(newCoursesSelected);
+    setPlannedCourseKeys(newPlannedKeys);
     
     toast.success('Course removed from your plan');
   };
@@ -143,17 +147,21 @@ const Index = () => {
   };
 
   const handleAddRecommendedCourse = (courseId: string) => {
-    if (coursesSelected.has(courseId)) {
-      toast.info('This course is already in your plan');
+    const courseToAdd = courses.find(c => c.course_id === courseId && c.stat !== 'Closed');
+
+    if (!courseToAdd) {
+      toast.error("Could not find an open section for the recommended course.");
       return;
     }
     
-    const course = getCourseById(courses, courseId);
-    if (course) {
-      setPlannedCourses([...plannedCourses, course]);
-      setCoursesSelected(new Set(coursesSelected).add(courseId));
-      toast.success('Course added to your plan');
+    if (plannedCourseKeys.has(courseToAdd.unique_key)) {
+      toast.info('This course section is already in your plan');
+      return;
     }
+    
+    setPlannedCourses([...plannedCourses, courseToAdd]);
+    setPlannedCourseKeys(new Set(plannedCourseKeys).add(courseToAdd.unique_key));
+    toast.success('Course added to your plan');
   };
 
   return (
@@ -252,7 +260,7 @@ const Index = () => {
                 <CardContent className="p-6">
                   <CourseList
                     courses={departmentCourses}
-                    selectedCourses={selectedCourseIds}
+                    selectedCourses={selectedCourseKeys}
                     onSelectCourse={handleSelectCourse}
                     onAddSelected={handleAddSelected}
                   />

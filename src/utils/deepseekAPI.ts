@@ -1,19 +1,17 @@
 import { Course, Recommendation } from '@/models/types';
 
-// API Key is handled by the serverless function in production
-// const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY; // REMOVED
+// Retrieve the API key from environment variables
+const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY;
 
 export const semanticSearchDeepseek = async (
   interests: string,
   candidateCourses: Course[]
 ): Promise<Recommendation[]> => {
   console.log(`[semanticSearchDeepseek] Starting. Interests: ${interests}, Candidates: ${candidateCourses.length}`);
-  /* // REMOVED - API key check is handled by the serverless function
-  if (!DEEPSEEK_API_KEY) { 
+  if (!DEEPSEEK_API_KEY) {
     console.error("❌ DeepSeek API Key not found. Make sure VITE_DEEPSEEK_API_KEY is set in your .env file.");
     return [];
   }
-  */
 
   const prompt = `You are an NYU course recommender bot. A student said they are interested in: "${interests}".
 Below is a list of available NYU courses. Recommend the top 5 most relevant ones and explain why for each:
@@ -30,15 +28,8 @@ Return your response as a JSON array with this format:
   ...
 ]`;
 
-  // REMOVED - Authorization header is added by the serverless function
-  /* 
   const headers = {
     "Authorization": `Bearer ${DEEPSEEK_API_KEY}`,
-    "Content-Type": "application/json"
-  };
-  */
-  // Use only necessary headers for the request to our own proxy function
-  const headers = {
     "Content-Type": "application/json"
   };
 
@@ -50,10 +41,10 @@ Return your response as a JSON array with this format:
 
   try {
     console.log("[semanticSearchDeepseek] Making fetch call to /api/deepseek/v1/chat/completions");
-    // Use the proxied path (which points to our Vercel function in production)
+    // Use the proxied path
     const response = await fetch("/api/deepseek/v1/chat/completions", {
       method: 'POST',
-      headers, // Send minimal headers to our proxy
+      headers,
       body: JSON.stringify(payload)
     });
     console.log(`[semanticSearchDeepseek] Fetch response status: ${response.status}`);

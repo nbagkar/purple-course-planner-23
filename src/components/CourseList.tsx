@@ -8,7 +8,7 @@ import { Course } from '@/models/types';
 interface CourseListProps {
   courses: Course[];
   selectedCourses: Set<string>;
-  onSelectCourse: (courseId: string, isChecked: boolean) => void;
+  onSelectCourse: (uniqueKey: string, isChecked: boolean) => void;
   onAddSelected: () => void;
 }
 
@@ -47,33 +47,33 @@ const CourseList: React.FC<CourseListProps> = ({
         <ScrollArea className="h-[400px] pr-4">
           <div className="space-y-4">
             {courses.map((course) => {
+              const isSelected = selectedCourses.has(course.unique_key);
               const isClosed = course.stat === 'Closed';
               return (
                 <div 
-                  key={course.course_id} 
-                  className={`flex items-start space-x-3 p-3 rounded-md transition-colors ${isClosed ? 'opacity-60' : 'hover:bg-gray-50'}`}
+                  key={course.unique_key}
+                  className={`flex items-start space-x-3 p-3 rounded-md transition-colors ${isClosed ? 'opacity-50 bg-gray-100' : 'hover:bg-gray-50'}`}
                 >
                   <Checkbox 
-                    id={course.course_id}
-                    checked={selectedCourses.has(course.course_id)}
-                    onCheckedChange={(checked) => onSelectCourse(course.course_id, !!checked)}
+                    id={course.unique_key}
+                    checked={isSelected}
                     disabled={isClosed}
-                    aria-label={`Select course ${course.course_id}`}
+                    onCheckedChange={(checked) => onSelectCourse(course.unique_key, !!checked)}
                   />
                   <div className={`${isClosed ? 'cursor-not-allowed' : ''}`}>
                     <label 
-                      htmlFor={course.course_id} 
-                      className={`font-medium ${isClosed ? 'text-gray-500 cursor-not-allowed' : 'cursor-pointer'}`}
+                      htmlFor={course.unique_key}
+                      className={`font-medium ${isClosed ? 'text-gray-500' : 'cursor-pointer'}`}
                     >
                       {course.course_id}: {course.course_name}
                     </label>
-                    <div className="text-sm text-muted-foreground mt-1">
+                    <div className={`text-sm text-muted-foreground mt-1 ${isClosed ? 'text-gray-400' : ''}`}>
                       <p>Credits: {course.credits} | Schedule: {course.meets}</p>
                       {course.instructor && <p>Instructor: {course.instructor}</p>}
                       {course.location && <p>Location: {course.location}</p>}
                       <p>
                         Enrollment: {course.enrolled}/{course.capacity} 
-                        <span className={`ml-2 font-semibold ${isClosed ? 'text-red-500' : 'text-green-600'}`}>
+                        <span className={`ml-2 font-semibold ${isClosed ? 'text-red-600' : 'text-green-600'}`}>
                           {course.stat}
                         </span>
                       </p>

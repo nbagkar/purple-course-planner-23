@@ -50,6 +50,7 @@ export const parseCsvToJson = (csvContent: string): Course[] => {
     
     // Create course object
     const course: Course = {
+      unique_key: `${courseCode}-${i}`,
       course_id: courseCode,
       course_name: getFieldValue(values, headerMap, 'title') || '',
       title: getFieldValue(values, headerMap, 'title') || '',

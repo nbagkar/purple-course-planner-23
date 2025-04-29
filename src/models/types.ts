@@ -1,4 +1,5 @@
 export interface Course {
+  unique_key: string;
   course_id: string;
   title: string;
   description: string;
